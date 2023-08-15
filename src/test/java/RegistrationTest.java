@@ -26,7 +26,7 @@ public class RegistrationTest {
 
 
     @Before
-    public void setUp(){
+    public void setUp() {
         Faker faker = new Faker();
         userName = faker.name().firstName() + faker.name().lastName();
         userEmail = RandomStringUtils.randomAlphanumeric(10) + "@yandex.ru";
@@ -38,6 +38,7 @@ public class RegistrationTest {
         driver = new ChromeDriver(options);
         registrationPage = new RegistrationPage(driver);
     }
+
     @After
     public void cleanUp() {
         driver.quit();
@@ -46,23 +47,24 @@ public class RegistrationTest {
         try {
             clientBearerToken = clientBearerToken.replace("Bearer ", "");
             userClient.delete(clientBearerToken);
-        }
-        catch (NullPointerException ignore){
+        } catch (NullPointerException ignore) {
         }
     }
+
     @Test
     public void checkRegistrationSuccessTest() {
 
         LoginPage loginPage = new LoginPage(driver);
 
-        driver.get(HomePage.openHomePage());
+        driver.get(HomePage.HOME_PAGE_URL);
         HomePage.clickLogin(driver);
         loginPage.clickRegistration(driver);
         registrationPage.inputRegistrationDataAndPressButton(driver, userName, userEmail, userPassword);
         loginPage.waitLoadInputButton();
-        MatcherAssert.assertThat(loginPage.getLoginTextButton(driver),containsString("Войти"));
+        MatcherAssert.assertThat(loginPage.getLoginTextButton(driver), containsString("Войти"));
 
     }
+
     @Test
     public void checkRegistrationWithIncorrectPassword() {
         driver.manage().window().maximize();
@@ -70,11 +72,11 @@ public class RegistrationTest {
 
         userPassword = RandomStringUtils.randomAlphanumeric(5);
 
-        driver.get(HomePage.openHomePage());
+        driver.get(HomePage.HOME_PAGE_URL);
         HomePage.clickLogin(driver);
         loginPage.clickRegistration(driver);
         registrationPage.inputRegistrationDataAndPressButton(driver, userName, userEmail, userPassword);
         registrationPage.waitLoadSmallTextError();
-        MatcherAssert.assertThat(registrationPage.getSmallPasswordErrorText(driver),containsString("Некорректный пароль"));
+        MatcherAssert.assertThat(registrationPage.getSmallPasswordErrorText(driver), containsString("Некорректный пароль"));
     }
 }

@@ -19,30 +19,35 @@ public class LoginPage {
     private final static By LOGIN_TEXT = By.xpath(".//h2[text()='Вход']");
 
 
-
     private WebDriver driver;
-    public void clickRegistration(WebDriver driver) {
-        driver.findElement(REGISTRATION_FROM_LOGIN_PAGE).click();
-    }
+
     public LoginPage(WebDriver driver) {
         this.driver = driver;
     }
-    public static By getLoginText(){
+
+    public static By getLoginText() {
         return LOGIN_TEXT;
     }
+
+    public static String openAuthorizationPage() {
+        return LOGIN_PAGE_URL;
+    }
+
+    public void clickRegistration(WebDriver driver) {
+        driver.findElement(REGISTRATION_FROM_LOGIN_PAGE).click();
+    }
+
     public String getLoginTextButton(WebDriver driver) {
         String textButton = driver.findElement(INPUT_BUTTON).getText();
         return textButton;
     }
-    public static String openAuthorizationPage(){
-        return LOGIN_PAGE_URL;
-    }
 
-    public void waitLoadInputButton(){
+    public void waitLoadInputButton() {
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(
                 ExpectedConditions.visibilityOfElementLocated(INPUT_BUTTON));
     }
-    public void inputLoginDataAndPressButton(WebDriver driver, String userEmail, String userPassword ){
+
+    public void inputLoginDataAndPressButton(WebDriver driver, String userEmail, String userPassword) {
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(EMAIL_FOR_LOGIN_INPUT));
         driver.findElement(EMAIL_FOR_LOGIN_INPUT).click();
         driver.findElement(INPUT_EMAIL).sendKeys(userEmail);

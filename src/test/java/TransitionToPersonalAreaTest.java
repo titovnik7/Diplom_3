@@ -26,20 +26,23 @@ public class TransitionToPersonalAreaTest {
     private String userEmail;
     private String userPassword;
     private LoginPage loginPage;
+
     @Before
-    public void setUp(){
+    public void setUp() {
         faker = new Faker();
         String userName = (faker.name().firstName() + faker.name().lastName());
         userEmail = RandomStringUtils.randomAlphanumeric(10) + "@yandex.ru";
         userPassword = RandomStringUtils.randomAlphanumeric(6);
 
         userClient = new UserClient();
-        userClient.create(userEmail,userPassword, userName);
+        userClient.create(userEmail, userPassword, userName);
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");driver = new ChromeDriver(options);
+        options.addArguments("--remote-allow-origins=*");
+        driver = new ChromeDriver(options);
         loginPage = new LoginPage(driver);
     }
+
     @After
     public void cleanUp() {
         ValidatableResponse login = userClient.login(userEmail, userPassword);
@@ -47,17 +50,18 @@ public class TransitionToPersonalAreaTest {
         userClient.delete(bearerToken);
         driver.quit();
     }
+
     @Test
-    public void checkTransitionToPersonalAreaTest(){
+    public void checkTransitionToPersonalAreaTest() {
         driver.manage().window().maximize();
-        driver.get(HomePage.openHomePage());
-        driver.findElement(By.xpath(HomePage.getXpathLoginHomePageButton())).click();
-        loginPage.inputLoginDataAndPressButton(driver,userEmail,userPassword);
+        driver.get(HomePage.HOME_PAGE_URL);
+        driver.findElement(By.xpath(HomePage.XPATH_LOGIN_HOME_PAGE_BUTTON)).click();
+        loginPage.inputLoginDataAndPressButton(driver, userEmail, userPassword);
         new WebDriverWait(driver, Duration.ofSeconds(3))
-                .until(ExpectedConditions.elementToBeClickable(By.xpath(HomePage.getXpathPersonalAreaButton())));
-        driver.findElement(By.xpath(HomePage.getXpathPersonalAreaButton())).click();
+                .until(ExpectedConditions.elementToBeClickable(By.xpath(HomePage.XPATH_PERSONAL_AREA_BUTTON)));
+        driver.findElement(By.xpath(HomePage.XPATH_PERSONAL_AREA_BUTTON)).click();
         new WebDriverWait(driver, Duration.ofSeconds(3))
                 .until(ExpectedConditions.elementToBeClickable(PersonalAreaPage.getXpathAccountText()));
-        Assert.assertEquals(PersonalAreaPage.getPersonalAreaText(),driver.findElement(PersonalAreaPage.getXpathAccountText()).getText());
+        Assert.assertEquals(PersonalAreaPage.getPersonalAreaText(), driver.findElement(PersonalAreaPage.getXpathAccountText()).getText());
     }
 }

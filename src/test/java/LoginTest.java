@@ -24,13 +24,13 @@ import java.time.Duration;
 
 @RunWith(Parameterized.class)
 public class LoginTest {
+    private final String buttonXpath;
+    private final String page;
     private WebDriver driver;
     private UserClient userClient;
     private Faker faker;
     private String userEmail;
     private String userPassword;
-    private final String buttonXpath;
-    private final String page;
     private LoginPage loginPage;
 
 
@@ -38,30 +38,33 @@ public class LoginTest {
         this.buttonXpath = buttonXpath;
         this.page = page;
     }
+
     @Parameterized.Parameters
-    public static Object[][] getTestParameters(){
+    public static Object[][] getTestParameters() {
         return new Object[][]{
-                {HomePage.getXpathLoginHomePageButton(),HomePage.getHomePageUrl()},
-                {HomePage.getXpathPersonalAreaButton(),HomePage.getHomePageUrl()},
+                {HomePage.XPATH_LOGIN_HOME_PAGE_BUTTON, HomePage.HOME_PAGE_URL},
+                {HomePage.XPATH_PERSONAL_AREA_BUTTON, HomePage.HOME_PAGE_URL},
                 {RegistrationPage.getXpathLoginFromRegistrationPageButton(), RegistrationPage.getLoginFromRegistrationPage()},
                 {ForgotPasswordPage.getXpathLoginFromForgotPasswordPageButton(), ForgotPasswordPage.getLoginFromForgotPasswordPage()}
         };
     }
+
     @Before
-    public void setUp(){
+    public void setUp() {
         faker = new Faker();
         String userName = (faker.name().firstName() + faker.name().lastName());
         userEmail = RandomStringUtils.randomAlphanumeric(10) + "@yandex.ru";
         userPassword = RandomStringUtils.randomAlphanumeric(6);
 
         userClient = new UserClient();
-        userClient.create(userEmail,userPassword, userName);
+        userClient.create(userEmail, userPassword, userName);
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver(options);
         loginPage = new LoginPage(driver);
     }
+
     @After
     public void cleanUp() {
         ValidatableResponse login = userClient.login(userEmail, userPassword);
@@ -69,12 +72,13 @@ public class LoginTest {
         userClient.delete(bearerToken);
         driver.quit();
     }
+
     @Test
-    public void checkLoginParamTest(){
+    public void checkLoginParamTest() {
         driver.manage().window().maximize();
         driver.get(page);
         driver.findElement(By.xpath(buttonXpath)).click();
-        loginPage.inputLoginDataAndPressButton(driver,userEmail,userPassword);
+        loginPage.inputLoginDataAndPressButton(driver, userEmail, userPassword);
         new WebDriverWait(driver, Duration.ofSeconds(3))
                 .until(ExpectedConditions.elementToBeClickable(HomePage.getXpathCheckoutButtonText(driver)));
         Assert.assertEquals("Оформить заказ", driver.findElement(HomePage.getXpathCheckoutButtonText(driver)).getText());

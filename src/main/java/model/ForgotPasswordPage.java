@@ -10,10 +10,12 @@ public class ForgotPasswordPage {
     public ForgotPasswordPage(WebDriver driver) {
         this.driver = driver;
     }
-    public static String getLoginFromForgotPasswordPage(){
+
+    public static String getLoginFromForgotPasswordPage() {
         return RECOVERY_FORM_PAGE;
     }
-    public static String getXpathLoginFromForgotPasswordPageButton(){
+
+    public static String getXpathLoginFromForgotPasswordPageButton() {
         return XPATH_LOGIN_FROM_FORGOT_PASSWORD_PAGE_BUTTON;
     }
 }

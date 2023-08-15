@@ -13,12 +13,11 @@ import org.openqa.selenium.chrome.ChromeOptions;
 
 @RunWith(Parameterized.class)
 public class TransitionToSectionTest {
-    private WebDriver driver;
-
     private final By sectionConstructorTab;
     private final By neighboringSection;
     private final String expectedName;
     private final By activeTab;
+    private WebDriver driver;
 
 
     public TransitionToSectionTest(By sectionConstructorTab, String expectedName, By neighboringSection, By activeTab) {
@@ -30,28 +29,31 @@ public class TransitionToSectionTest {
 
 
     @Parameterized.Parameters
-    public static Object[][] getTestParameters(){
+    public static Object[][] getTestParameters() {
         return new Object[][]{
-                {HomePage.getXpathTabBuns(),"Булки",HomePage.getXpathTabSauces(),HomePage.getActiveTabBuns()},
-                {HomePage.getXpathTabSauces(),"Соусы",HomePage.getXpathTabFillings(),HomePage.getActiveTabSauce()},
-                {HomePage.getXpathTabFillings(),"Начинки",HomePage.getXpathTabSauces(),HomePage.getActiveTabFillings()}
+                {HomePage.XPATH_TAB_BUNS, "Булки", HomePage.XPATH_TAB_SAUCES, HomePage.ACTIVE_TAB_BUNS},
+                {HomePage.XPATH_TAB_SAUCES, "Соусы", HomePage.XPATH_TAB_FILLINGS, HomePage.ACTIVE_TAB_SAUCE},
+                {HomePage.XPATH_TAB_FILLINGS, "Начинки", HomePage.XPATH_TAB_SAUCES, HomePage.ACTIVE_TAB_FILLINGS}
         };
     }
+
     @Before
-    public void setUp(){
+    public void setUp() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver(options);
     }
+
     @After
-    public void cleanUp(){
+    public void cleanUp() {
         driver.quit();
     }
+
     @Test
-    public void checkTransitionToSectionTest(){
+    public void checkTransitionToSectionTest() {
         driver.manage().window().maximize();
-        driver.get(HomePage.openHomePage());
+        driver.get(HomePage.HOME_PAGE_URL);
         driver.findElement(neighboringSection).click();
         driver.findElement(sectionConstructorTab).click();
         String actualName = driver.findElement(activeTab).getText();

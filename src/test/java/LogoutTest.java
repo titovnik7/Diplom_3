@@ -26,21 +26,23 @@ public class LogoutTest {
     private String userEmail;
     private String userPassword;
     private LoginPage loginPage;
+
     @Before
-    public void setUp(){
+    public void setUp() {
         faker = new Faker();
         String userName = (faker.name().firstName() + faker.name().lastName());
         userEmail = RandomStringUtils.randomAlphanumeric(10) + "@yandex.ru";
         userPassword = RandomStringUtils.randomAlphanumeric(6);
         userClient = new UserClient();
         loginPage = new LoginPage(driver);
-        userClient.create(userEmail,userPassword, userName);
+        userClient.create(userEmail, userPassword, userName);
         WebDriverManager.chromedriver().setup();
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
         driver = new ChromeDriver(options);
 
     }
+
     @After
     public void cleanUp() {
         ValidatableResponse login = userClient.login(userEmail, userPassword);
@@ -48,20 +50,21 @@ public class LogoutTest {
         userClient.delete(bearerToken);
         driver.quit();
     }
+
     @Test
-    public void checkLogoutUserTest(){
+    public void checkLogoutUserTest() {
         driver.manage().window().maximize();
         driver.get(LoginPage.openAuthorizationPage());
-        loginPage.inputLoginDataAndPressButton(driver,userEmail,userPassword);
+        loginPage.inputLoginDataAndPressButton(driver, userEmail, userPassword);
         new WebDriverWait(driver, Duration.ofSeconds(3))
                 .until(ExpectedConditions.elementToBeClickable(HomePage.getXpathCheckoutButtonText(driver)));
-        driver.findElement(By.xpath(HomePage.getXpathPersonalAreaButton())).click();
+        driver.findElement(By.xpath(HomePage.XPATH_PERSONAL_AREA_BUTTON)).click();
         new WebDriverWait(driver, Duration.ofSeconds(3))
                 .until(ExpectedConditions.elementToBeClickable(PersonalAreaPage.getXpathAccountText()));
         driver.findElement(By.xpath(PersonalAreaPage.getXpathLogoutUser())).click();
         new WebDriverWait(driver, Duration.ofSeconds(3))
                 .until(ExpectedConditions.elementToBeClickable(LoginPage.getLoginText()));
         String loginText = driver.findElement(LoginPage.getLoginText()).getText();
-        Assert.assertEquals("Вход",loginText);
+        Assert.assertEquals("Вход", loginText);
     }
 }

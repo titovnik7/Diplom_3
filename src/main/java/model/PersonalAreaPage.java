@@ -12,25 +12,32 @@ public class PersonalAreaPage {
 
     private final static String PERSONAL_AREA_TEXT = "В этом разделе вы можете изменить свои персональные данные";
     WebDriver driver;
+
     public PersonalAreaPage(WebDriver driver) {
         this.driver = driver;
     }
-    public static By getXpathAccountText(){
+
+    public static By getXpathAccountText() {
         return XPATH_ACCOUNT_TEXT;
     }
-    public static String getPersonalAreaText(){
+
+    public static String getPersonalAreaText() {
         return PERSONAL_AREA_TEXT;
     }
-    public static String getXpathLogoutUser(){
+
+    public static String getXpathLogoutUser() {
         return XPATH_LOGOUT_USER;
     }
-    public void openPersonalAreaPage() {
-        driver.get(PERSONAL_AREA_PAGE_URL);
-    }
-    public static String getXpathConstructorButton(){
+
+    public static String getXpathConstructorButton() {
         return XPATH_CONSTRUCTOR_BUTTON;
     }
-    public static String getXpathConstructorImage(){
+
+    public static String getXpathConstructorImage() {
         return XPATH_CONSTRUCTOR_IMAGE;
+    }
+
+    public void openPersonalAreaPage() {
+        driver.get(PERSONAL_AREA_PAGE_URL);
     }
 }

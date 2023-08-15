@@ -1,5 +1,6 @@
 package api;
 
+import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
 
 import static api.RestClient.getBaseSpec;
@@ -10,17 +11,20 @@ public class UserClient {
     private static final String CREATE_USER_PATH = "api/auth/register";
     private static final String DELETE_USER_PATH = "api/auth/user";
 
+    @Step("Регистрация")
     public ValidatableResponse create(String userEmail, String userPassword, String userName) {
         return given()
                 .spec(getBaseSpec())
-                .body("{"+ '"' + "email" + '"' + ":" + '"' + userEmail + '"' + "," +
-                        '"' + "password" + '"' + ":" + '"'  + userPassword + '"' + "," +
+                .body("{" + '"' + "email" + '"' + ":" + '"' + userEmail + '"' + "," +
+                        '"' + "password" + '"' + ":" + '"' + userPassword + '"' + "," +
                         '"' + "name" + '"' + ":" + '"' + userName + '"' + "}")
                 .when()
                 .post(CREATE_USER_PATH)
                 .then()
                 .assertThat();
     }
+
+    @Step("Удаление пользователя")
     public ValidatableResponse delete(String bearerToken) {
         return given()
                 .spec(getBaseSpec())
@@ -30,11 +34,13 @@ public class UserClient {
                 .then()
                 .assertThat();
     }
+
+    @Step("Вход")
     public ValidatableResponse login(String userEmail, String userPassword) {
         return given()
                 .spec(getBaseSpec())
-                .body("{"+ '"' + "email" + '"' + ":" + '"' + userEmail + '"' + "," +
-                        '"' + "password" + '"' + ":" + '"'  + userPassword + '"' + "}")
+                .body("{" + '"' + "email" + '"' + ":" + '"' + userEmail + '"' + "," +
+                        '"' + "password" + '"' + ":" + '"' + userPassword + '"' + "}")
                 .when()
                 .post(LOGIN_USER_PATH)
                 .then()

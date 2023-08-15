@@ -20,24 +20,30 @@ public class RegistrationPage {
     private final static String REGISTRATION_PAGE_URL = "https://stellarburgers.nomoreparties.site/register";
     private final static String XPATH_LOGIN_FROM_REGISTRATION_PAGE_BUTTON = ".//a[@class = 'Auth_link__1fOlj']";
     private WebDriver driver;
+
     public RegistrationPage(WebDriver driver) {
         this.driver = driver;
     }
+
     public static String getLoginFromRegistrationPage() {
         return REGISTRATION_PAGE_URL;
     }
+
     public static String getXpathLoginFromRegistrationPageButton() {
         return XPATH_LOGIN_FROM_REGISTRATION_PAGE_BUTTON;
     }
-    public String getSmallPasswordErrorText(WebDriver driver){
+
+    public String getSmallPasswordErrorText(WebDriver driver) {
         String textError = driver.findElement(SMALL_PASSWORD_ERROR_TEXT).getText();
         return textError;
     }
+
     public void waitLoadSmallTextError() {
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(
                 ExpectedConditions.visibilityOfElementLocated(SMALL_PASSWORD_ERROR_TEXT));
     }
-    public void inputRegistrationDataAndPressButton(WebDriver driver,String userName,String userEmail,String userPassword ){
+
+    public void inputRegistrationDataAndPressButton(WebDriver driver, String userName, String userEmail, String userPassword) {
         new WebDriverWait(driver, Duration.ofSeconds(5)).until(ExpectedConditions.visibilityOfElementLocated(NAME_FOR_REGISTRATION_INPUT));
         driver.findElement(NAME_FOR_REGISTRATION_INPUT).click();
         driver.findElement(INPUT_NAME).sendKeys(userName);
